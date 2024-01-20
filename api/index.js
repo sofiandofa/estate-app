@@ -1,5 +1,5 @@
 import express from 'express';
-import authRouter from './routes/auth.route';
+import authRouter from './routes/auth.route.js';
 import mongoose from 'mongoose';
 import dotenv from "dotenv"
 dotenv.config()
@@ -8,12 +8,12 @@ dotenv.config()
 const app=express();
 mongoose
 .connect(process.env.MONGO_URI)
-.then(()=>console.log("mongodb connected "))
+.then(()=>console.log("mongodb connected succesfully"))
 .catch((error)=>{console.log(error)})
 
 
 app.listen(3000,()=>{
-    console.log("the server is lestning in port 3000")
+    console.log("the server is lestinin in port 3000")
 })
 app.use(express.json())
 
