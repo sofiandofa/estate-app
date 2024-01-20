@@ -2,6 +2,8 @@ import './App.css'
 import {Route,BrowserRouter,Routes} from "react-router-dom"
 import Home from './pages/Home.jsx'
 import SignUp from './pages/SignUp.jsx'
+import SignIn from './pages/SignIn.jsx'
+
 import Header from './components/Header.jsx'
 
 function App() {
@@ -11,7 +13,9 @@ function App() {
         <Header/>
         <Routes>
             <Route path='/'  element={<Home/>} />
-            <Route path='/sign-Up'  element={<SignUp/>} />
+            <Route path='/sign-up'  element={<SignUp/>} />
+            <Route path='/sign-in'  element={<SignIn/>} />
+
         </Routes>
     </BrowserRouter>
   )

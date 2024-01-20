@@ -1,4 +1,5 @@
 import {useState} from "react"
+import OAuth from "../components/OAuth"
 
 function SignUp() {
     const[error,setError]=useState(null)
@@ -38,23 +39,27 @@ function SignUp() {
     return (
         <div className="w-1/2 mx-auto  bg-slate-100 my-20 shadow-md">
             <h2 className=" font-medium mx-auto  w-fit  py-5  text-lg ">sign up</h2>
-            <from onSubmit={submitHandler} className="flex flex-col items-center gap-6">
+            <form onSubmit={submitHandler} className="flex flex-col items-center gap-6">
                 <input type="text" 
+                        id="username"
                         placeholder="username" 
                         className=" w-3/4 mx-auto p-1 rounded-md" 
                         onChange={handleChange} />
                 <input type="email" 
+                        id="email"
                         placeholder="email" 
                         className=" w-3/4 mx-auto p-1 rounded-md" 
                         onChange={handleChange} />
                 <input type="password" 
+                        id="password"
                         placeholder="password" 
                         className=" w-3/4 mx-auto p-1 rounded-md" 
                         onChange={handleChange} />
-                <button disabled={loading} className="bg-gray-300 w-3/4 mb-4 p-1 hover:opacity-90">
+                <button disabled={loading} className="bg-gray-300 w-3/4  p-1 hover:opacity-90">
                     {loading? "loading..." :"sign up" }
                 </button>
-            </from>
+                <OAuth/>
+            </form>
             {error && <p className="text-red-500"> {error} </p> }
         </div>
     )

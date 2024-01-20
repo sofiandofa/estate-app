@@ -1,8 +1,8 @@
-import {useState} from "react"
+import { useState} from "react"
 import {useSelector,useDispatch} from "react-redux"
 import {signInStart,signInFailure, signInSuccess} from '../redux/user/authSlice'
 function SignIn() {
-    const[error,loading]=useSelector(state=>state.user)
+    const{error,loading}=useSelector(state=>state.user)
     const dispatch=useDispatch()
 
     const [formData,setFormData]=useState({})
@@ -38,19 +38,21 @@ function SignIn() {
     return (
         <div className="w-1/2 mx-auto  bg-slate-100 my-20 shadow-md">
             <h2 className=" font-medium mx-auto  w-fit  py-5  text-lg ">sign up</h2>
-            <from onSubmit={submitHandler} className="flex flex-col items-center gap-6">
+            <form onSubmit={submitHandler} className="flex flex-col items-center gap-6">
                 <input type="email" 
+                        id="email"
                         placeholder="email" 
-                        className=" w-3/4 mx-auto p-1 rounded-md" 
+                        className=" w-3/4 mx-auto p-1 rounded-md outline-none" 
                         onChange={handleChange} />
                 <input type="password" 
+                        id="password"
                         placeholder="password" 
-                        className=" w-3/4 mx-auto p-1 rounded-md" 
+                        className=" w-3/4 mx-auto p-1 rounded-md outline-none" 
                         onChange={handleChange} />
                 <button disabled={loading} className="bg-gray-300 w-3/4 mb-4 p-1 hover:opacity-90">
                     {loading? "loading..." :"sign in" }
                 </button>
-            </from>
+            </form>
             {error && <p className="text-red-500"> {error} </p> }
         </div>
     )

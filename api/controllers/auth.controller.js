@@ -30,3 +30,11 @@ export const signIn=async(req,res)=>{
         next(error)
     }
 }
+
+export const google =async(req,res)=>{
+    try {
+        
+    } catch (error) {
+        
+    }
+}   
