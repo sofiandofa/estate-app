@@ -4,3 +4,5 @@ const handleErorr=(statusCode,message)=>{
     error.statusCode=statusCode
     return error
 }
+
+export default handleErorr

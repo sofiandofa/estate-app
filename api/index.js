@@ -5,17 +5,18 @@ import dotenv from "dotenv"
 dotenv.config()
 
 
-const app=express();
+
 mongoose
 .connect(process.env.MONGO_URI)
 .then(()=>console.log("mongodb connected succesfully"))
 .catch((error)=>{console.log(error)})
 
+const app=express();
+app.use(express.json())
 
 app.listen(3000,()=>{
     console.log("the server is lestinin in port 3000")
 })
-app.use(express.json())
 
 app.use("/api/auth",authRouter)
 

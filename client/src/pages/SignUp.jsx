@@ -16,7 +16,7 @@ function SignUp() {
         e.preventDefault();
         try {
             setLoading(true)
-            const res=await fetch("/sign-in",{
+            const res=await fetch("/sign-up",{
                 method:"POST",
                 body:JSON.stringify(formData),
                 headers: {
