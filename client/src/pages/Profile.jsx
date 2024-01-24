@@ -11,16 +11,20 @@ import { app } from '../firebase';
 import {
     updateUserFailure,
     updateUserStart,
-    updateUserSuccess
+    updateUserSuccess,
+    deleteUserFailure,
+    deleteUserStart,
+    deleteUserSuccess
 }from "../redux/user/userSlice"
 
 const Profile = () => {
-    const{currentUser}=useSelector(state=>state.user)
+    const{currentUser,error,loading}=useSelector(state=>state.user)
     const dispatch=useDispatch()
     const fileRef=useRef(null)
     const [file, setFile] = useState(undefined);
     const [filePerc, setFilePerc] = useState(0);
     const [fileUploadError, setFileUploadError] = useState(false);
+    const[updateSuccess,setUpdateSuccess]=useState(false)
     const [formData,setFormData]=useState({})
 
     useEffect(()=>{
@@ -58,7 +62,7 @@ const Profile = () => {
         e.preventDefault()
         dispatch(updateUserStart())
         try {
-            const res=await fetch(`/api/user/update${currentUser._id}`,{
+            const res=await fetch(`/api/user/update/${currentUser._id}`,{
                 method:"POST",
                 body: JSON.stringify(formData),
                 headers: {
@@ -69,10 +73,28 @@ const Profile = () => {
             if(data.success===false){
                 dispatch(updateUserFailure(data.message))
             }
+            setUpdateSuccess(true)
             dispatch(updateUserSuccess(data))
         } catch (error) {
             dispatch(updateUserFailure(error.message))
         }
+    }
+
+    const handleDeleteUser=async()=>{
+        try {
+            dispatch(deleteUserStart())
+            const res =await fetch(`/api/user/delete/${currentUser._id}`,{method:"DELETE"})
+            const data=await res.json()
+            if(data.success===false){
+                dispatch(deleteUserFailure(data))
+            }
+            dispatch(deleteUserSuccess())
+        } catch (error) {
+            dispatch(deleteUserFailure(error.message))
+        }
+    }
+    const handleSignOut =(e)=>{
+        
     }
 
     return (
@@ -118,7 +140,25 @@ const Profile = () => {
                 onChange={handleChange}
                 placeholder="password"
                 className=" w-3/4 mx-auto p-1 rounded-md "/>
+                <button disabled={loading} className="bg-green-400 w-3/4 mb-4 p-1 hover:opacity-90">
+                    {loading ? "loading..." : "update"}
+                </button>
             </form>
+            <div className='flex justify-between mt-5'>
+                <span
+                onClick={handleDeleteUser}
+                className='text-red-600 cursor-pointer'
+                >
+                Delete account
+                </span>
+                <span onClick={handleSignOut} className='text-red-600 cursor-pointer'>
+                Sign out
+                </span>
+            </div>
+            <p className="text-red-600 mt-5">{error? error :''}</p>
+            <p className='text-green-700 mt-5'>
+                {updateSuccess ? 'User is updated successfully!' : ''}
+            </p>
         </div>
     )
 }
