@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import {useSlector}from "react-redux"
+import {useSelector,useDispatch}from "react-redux"
 import {
     getDownloadURL,
     getStorage,
@@ -8,10 +8,15 @@ import {
 } from 'firebase/storage';
 import { app } from '../firebase';
 
-
+import {
+    updateUserFailure,
+    updateUserStart,
+    updateUserSuccess
+}from "../redux/user/userSlice"
 
 const Profile = () => {
-    const{currentUser}=useSlector(state=>state.user)
+    const{currentUser}=useSelector(state=>state.user)
+    const dispatch=useDispatch()
     const fileRef=useRef(null)
     const [file, setFile] = useState(undefined);
     const [filePerc, setFilePerc] = useState(0);
@@ -46,13 +51,42 @@ const Profile = () => {
             }
             );
         };
+    const handleChange=(e)=>{
+        setFormData({...formData,[e.target.id]:e.target.value})
+    }
+    const submitHanlder=async(e)=>{
+        e.preventDefault()
+        dispatch(updateUserStart())
+        try {
+            const res=await fetch(`/api/user/update${currentUser._id}`,{
+                method:"POST",
+                body: JSON.stringify(formData),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            const data=await res.json()
+            if(data.success===false){
+                dispatch(updateUserFailure(data.message))
+            }
+            dispatch(updateUserSuccess(data))
+        } catch (error) {
+            dispatch(updateUserFailure(error.message))
+        }
+    }
 
     return (
         <div className=" max-w-lg mx-auto p-2 bg-slate-200">
             <h1 className=" text-center"> Profile </h1>
             
             <div>
-                <input type="file" name="" id="" hidden ref={fileRef} onChange={(e)=>setFile(e.target.files[0])} />
+                <input 
+                    type="file"  
+                    hidden 
+                    ref={fileRef} 
+                    onChange={(e)=>setFile(e.target.files[0])} 
+                    accept='image/*'
+                />
                 <img src={currentUser.avatar} alt="" 
                     className=" self-center rounded-full h-7 w-7" 
                     onClick={()=>fileRef.current.click()}
@@ -71,8 +105,19 @@ const Profile = () => {
                     ''
                 )}
             </p>
-            <form>
-                <input type="text" id="username"  />
+            <form onSubmit={submitHanlder}>
+                <input type="text" id="username" 
+                onChange={handleChange} 
+                placeholder="username"
+                className=" w-3/4 mx-auto p-1 rounded-md "/>
+                <input type="email" id="email" 
+                placeholder="email"
+                onChange={handleChange} 
+                className=" w-3/4 mx-auto p-1 rounded-md "/>
+                <input type="password" id="password" 
+                onChange={handleChange}
+                placeholder="password"
+                className=" w-3/4 mx-auto p-1 rounded-md "/>
             </form>
         </div>
     )

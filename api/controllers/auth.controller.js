@@ -46,7 +46,7 @@ export const google =async(req,res)=>{
             Math.random().toString(36).slice(-8);
             const hashedPassword=bcryptjs.hashSync(generatedPassword,10)
             const newUser=User.create({
-                username:req.body.username.split(' ').join('').toLowerCase() + Math.random().toString(36).slice(-3),
+                username:username.split(' ').join('').toLowerCase() + Math.random().toString(36).slice(-3),
                 email,
                 password:hashedPassword,
                 avatar

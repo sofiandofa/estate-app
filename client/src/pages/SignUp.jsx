@@ -17,12 +17,13 @@ function SignUp() {
         e.preventDefault();
         try {
             setLoading(true)
-            const res=await fetch("/sign-up",{
+            const res=await fetch("/api/auth/sign-up",{
                 method:"POST",
                 body:JSON.stringify(formData),
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                
             })
             const data=res.json()
             if(data.success===false){
@@ -43,24 +44,24 @@ function SignUp() {
                 <input type="text" 
                         id="username"
                         placeholder="username" 
-                        className=" w-3/4 mx-auto p-1 rounded-md" 
+                        className=" w-3/4 mx-auto p-1 rounded-md " 
                         onChange={handleChange} />
                 <input type="email" 
                         id="email"
                         placeholder="email" 
-                        className=" w-3/4 mx-auto p-1 rounded-md" 
+                        className=" w-3/4 mx-auto p-1 rounded-md  " 
                         onChange={handleChange} />
                 <input type="password" 
                         id="password"
                         placeholder="password" 
-                        className=" w-3/4 mx-auto p-1 rounded-md" 
+                        className=" w-3/4 mx-auto p-1 rounded-md " 
                         onChange={handleChange} />
                 <button disabled={loading} className="bg-gray-300 w-3/4  p-1 hover:opacity-90">
                     {loading? "loading..." :"sign up" }
                 </button>
                 <OAuth/>
             </form>
-            {error && <p className="text-red-500"> {error} </p> }
+            {error && <p className="text-red-500 text-center"> {error} </p> }
         </div>
     )
 }
