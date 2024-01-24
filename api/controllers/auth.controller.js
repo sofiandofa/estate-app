@@ -6,9 +6,9 @@ import jwt from 'jsonwebtoken'
 export const signUp=async(req,res,next)=>{
     const{username,email,password}=req.body;
     const hashedPassword=bcryptjs.hashSync(password,10)
-    const newUser=User.create({username,email,password:hashedPassword})
     try {
-        await newUser.save()
+        const newUser=User.create({username,email,password:hashedPassword})
+        await newUser.save
         res.status(200).json("the user created succesfully")
 
     } catch (error) {
@@ -32,9 +32,32 @@ export const signIn=async(req,res)=>{
 }
 
 export const google =async(req,res)=>{
+    
+    const{username,email,avatar}=req.body
     try {
-        
+        const validUser=await User.findOne({email})
+        if(validUser){
+            const token=jwt.sign({id:validUser._id},process.env.JWT_SECRET)
+            const{password:pass,...rest}=validUser._doc
+            res.status(201).json(rest).cookie('access_token',token,{httpOnly:true})
+        }else{
+            const generatedPassword =
+            Math.random().toString(36).slice(-8) +
+            Math.random().toString(36).slice(-8);
+            const hashedPassword=bcryptjs.hashSync(generatedPassword,10)
+            const newUser=User.create({
+                username:req.body.username.split(' ').join('').toLowerCase() + Math.random().toString(36).slice(-3),
+                email,
+                password:hashedPassword,
+                avatar
+            })
+            await newUser.save
+
+            const token=jwt.sign({id:newUser._id},process.env.JWT_SECRET)
+            const{password:pass,...rest}=newUser._doc
+            res.status(201).json(rest).cookie('access_token',token,{httpOnly:true})
+        }
     } catch (error) {
-        
+        next(error)
     }
 }   
