@@ -9,12 +9,9 @@ import {
 import { app } from '../firebase';
 
 import {
-    updateUserFailure,
-    updateUserStart,
-    updateUserSuccess,
-    deleteUserFailure,
-    deleteUserStart,
-    deleteUserSuccess
+    updateUserFailure,updateUserStart,updateUserSuccess,
+    deleteUserFailure,deleteUserStart,deleteUserSuccess,
+    signOutFailure,signOutStart,signOutSuccess
 }from "../redux/user/userSlice"
 
 const Profile = () => {
@@ -72,6 +69,7 @@ const Profile = () => {
             const data=await res.json()
             if(data.success===false){
                 dispatch(updateUserFailure(data.message))
+                return
             }
             setUpdateSuccess(true)
             dispatch(updateUserSuccess(data))
@@ -93,8 +91,20 @@ const Profile = () => {
             dispatch(deleteUserFailure(error.message))
         }
     }
-    const handleSignOut =(e)=>{
-        
+    const handleSignOut =async()=>{
+        try {
+            dispatch(signOutStart())
+            const res=await fetch(`/api/auth/sign-out`)
+            const data=await res.json()
+
+            if(data.success===false){
+                dispatch(signOutFailure(data.message))
+                return
+            }
+            dispatch(signOutSuccess())
+        } catch (error) {
+            dispatch(signOutFailure(error.message))
+        }
     }
 
     return (
