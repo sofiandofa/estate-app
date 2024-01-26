@@ -1,4 +1,5 @@
 import User from '../models/user.model.js'
+import Listing from "../models/listing.model.js"
 import handleErorr from '../utils/error.js'
 import bcryptjs from 'bcryptjs';
 
@@ -29,7 +30,7 @@ export const updateUser=async (req,res,next)=>{
     }
 }
 
-export const deleteUser=async(req,res)=>{
+export const deleteUser=async(req,res,next)=>{
     if(req.params.id!==req.user.id) return next(handleErorr(401,"you can only delete you account"))
     try {
         await User.findByIdAndDelete(req.params.id)
@@ -40,4 +41,15 @@ export const deleteUser=async(req,res)=>{
         next(error)
     }
 
+}
+
+export const getUserListings=async(req,res,next)=>{
+    try {
+        if(req.user.id===req.params.id){
+            const listings= await Listing.find({userRef:req.params.id})
+            res.status(200).json(listings)
+        }
+    } catch (error) {
+        next(error)
+    }
 }

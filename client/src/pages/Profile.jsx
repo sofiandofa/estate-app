@@ -11,8 +11,9 @@ import { app } from '../firebase';
 import {
     updateUserFailure,updateUserStart,updateUserSuccess,
     deleteUserFailure,deleteUserStart,deleteUserSuccess,
-    signOutFailure,signOutStart,signOutSuccess
+    signOutUserFailure,signOutUserStart,signOutUserSuccess
 }from "../redux/user/userSlice"
+import { Link } from "react-router-dom";
 
 const Profile = () => {
     const{currentUser,error,loading}=useSelector(state=>state.user)
@@ -23,6 +24,8 @@ const Profile = () => {
     const [fileUploadError, setFileUploadError] = useState(false);
     const[updateSuccess,setUpdateSuccess]=useState(false)
     const [formData,setFormData]=useState({})
+    const [userListings,setUserListings]=useState([])
+    const[showListingsError,setShowListingsError]=useState(false)
 
     useEffect(()=>{
         if (file) {
@@ -93,20 +96,33 @@ const Profile = () => {
     }
     const handleSignOut =async()=>{
         try {
-            dispatch(signOutStart())
+            dispatch(signOutUserStart())
             const res=await fetch(`/api/auth/sign-out`)
             const data=await res.json()
 
             if(data.success===false){
-                dispatch(signOutFailure(data.message))
+                dispatch(signOutUserFailure(data.message))
                 return
             }
-            dispatch(signOutSuccess())
+            dispatch(signOutUserSuccess())
         } catch (error) {
-            dispatch(signOutFailure(error.message))
+            dispatch(signOutUserFailure(error.message))
         }
     }
-
+    const handleShowListings=async(e)=>{
+        e.preventDefault()
+        try {
+            const res=fetch(`/api/user/listings/${currentUser._id}`)
+            const data=await res.json()
+            if(data.success===false){
+                setShowListingsError(true)
+            }
+            setShowListingsError(false)
+            setUserListings(data)
+        } catch (error) {
+            setShowListingsError(true)
+        }
+    }
     return (
         <div className=" max-w-lg mx-auto p-2 bg-slate-200">
             <h1 className=" text-center"> Profile </h1>
@@ -154,6 +170,9 @@ const Profile = () => {
                     {loading ? "loading..." : "update"}
                 </button>
             </form>
+            <Link to={"/create-listing"} className="bg-green-700 text-white font-semibold  w-3/4 mb-4 p-1 hover:opacity-90">
+                    create lising
+            </Link>
             <div className='flex justify-between mt-5'>
                 <span
                 onClick={handleDeleteUser}
@@ -168,6 +187,13 @@ const Profile = () => {
             <p className="text-red-600 mt-5">{error? error :''}</p>
             <p className='text-green-700 mt-5'>
                 {updateSuccess ? 'User is updated successfully!' : ''}
+            </p>
+            <button 
+            onClick={handleShowListings}
+                className=" bg-green-500 text-white font-semibold px-2 py-1 rounded-md">
+            </button>
+            <p className='text-red-700 mt-5'>
+                {showListingsError ? 'Error showing listings' : ''}
             </p>
         </div>
     )
