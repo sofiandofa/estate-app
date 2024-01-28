@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import { signInStart, signInFailure, signInSuccess } from '../redux/user/userSlice'
 import OAuth from "../components/OAuth"
@@ -32,7 +32,7 @@ function SignIn() {
                 dispatch(signInFailure(data.message))
                 return
             }
-            dispatch(signInSuccess(data))
+            dispatch(signInSuccess(data.message))
             navigate("/")
         } catch (error) {
             dispatch(signInFailure(error.message))
@@ -58,6 +58,10 @@ function SignIn() {
                 </button>
                 <OAuth/>
             </form>
+            <span className=" ml-1 text-xs">
+                you dont have account 
+                <Link to='/sign-up' className="text-red-500 hover:opacity-80"> sign up </Link>
+            </span>
             {error && <p className="text-red-500"> {error} </p>}
         </div>
     )

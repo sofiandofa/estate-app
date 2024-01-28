@@ -45,13 +45,13 @@ export const google =async(req,res)=>{
             Math.random().toString(36).slice(-8) +
             Math.random().toString(36).slice(-8);
             const hashedPassword=bcryptjs.hashSync(generatedPassword,10)
-            const newUser=User.create({
+            const newUser=new User.create({
                 username:username.split(' ').join('').toLowerCase() + Math.random().toString(36).slice(-3),
                 email,
                 password:hashedPassword,
                 avatar
             })
-            await newUser.save
+            await newUser.save()
 
             const token=jwt.sign({id:newUser._id},process.env.JWT_SECRET)
             const{password:pass,...rest}=newUser._doc
