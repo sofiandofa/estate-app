@@ -9,6 +9,7 @@ import PrivateRoute from './components/PrivateRoute.jsx'
 import Profile from './pages/Profile.jsx'
 import CreateListing from './pages/CreateListing.jsx'
 import UpdateListing from './pages/UpdateListing.jsx'
+import Listing from './pages/Listing.jsx'
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
                 <Route path='/profile' element={<Profile/>} />
                 <Route path='/create-listing' element={<CreateListing/>} />
                 <Route path='/update-listing/:listingId' element={<UpdateListing/>} />
+                <Route path='/listing/:listingId' element={<Listing/>} />
             </Route>
         </Routes>
     </BrowserRouter>

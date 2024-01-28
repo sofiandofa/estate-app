@@ -28,7 +28,7 @@ const UpdateListing = () => {
         furnished: false,
     })
     useEffect(()=>{
-        const getListing=async()=>{
+        const fetchListing=async()=>{
             const listingId=params.listingId
             const res=await fetch(`/api/listing/get/${listingId}`)
             const data=await res.json();
@@ -38,8 +38,8 @@ const UpdateListing = () => {
             }
             setFormData(data)
         }
-        getListing()
-    },[])
+        fetchListing()
+    },[params.listingId])
     const handleImageSubmit=async(e)=>{
         e.preventDefault();
         if(files.length>0 && formData.imageUrls+files.length < 7 ){
