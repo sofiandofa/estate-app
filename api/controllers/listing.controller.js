@@ -57,3 +57,40 @@ export const getListing =async(req,res,next)=>{
     }
 
 }
+
+export const getListings=async(req,res,next)=>{
+    try {
+        const limit =parseInt(req.query.limit)||9
+        const offer=req.query.offer
+        const satrtIndex=parseInt(req.query.satrtIndex)||0
+        if(req.query.offer==="false"||req.query.offer===undefined){
+            offer={$in:[false,true]}
+        }
+        const furnished=req.query.furnished
+        if(req.query.furnished==="false"||req.query.furnished===undefined){
+            furnished={$in:[false,true]}
+        }
+        const parking=req.query.parking;
+        if(req.query.parking==="false"||req.query.parking===undefined){
+            parking={$in:[false,true]}
+        }
+        const type=req.query.type
+        if(req.query.type==="false"||req.query.type==='all'){
+            type={$in:["sale","rent"]}
+        }
+        const searchTerm=req.query.searchTerm||""
+
+        const sort=req.query.sort|| "createdAt"
+        const order=req.query.sort||"desc"
+        const updatedListing=await Listing.find({
+            name:{$regex:searchTerm,$option:'i'},
+            type,
+            parking,
+            furnished,
+            offer,
+        }).sort({[sort]:order}).skip(satrtIndex)
+        res.status(201).json(updatedListing)
+    } catch (error) {
+        next(error)
+    }
+}
