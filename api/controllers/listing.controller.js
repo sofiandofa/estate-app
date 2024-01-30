@@ -1,10 +1,11 @@
 import Listing from "../models/listing.model.js"
 import handleErorr from "../utils/error.js"
 
-export const createListing=async(req,res)=>{
+export const createListing=async(req,res,next)=>{
     try {
-        const listing=await new Listing.create(req.body)
-        res.status(201).json(listing)
+        const listing=await  Listing.create(req.body)
+        
+        return res.status(201).json(listing)
     } catch (error) {
         next(error)
     }

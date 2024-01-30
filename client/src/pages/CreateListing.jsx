@@ -42,10 +42,14 @@ const CreateListing = () => {
                     ...formData,
                     imageUrls:formData.imageUrls.concat(urls)
                 })
+                setUploading(false)
+                setImageUploadError(null)
             })
             .catch(
                 setImageUploadError("Image upload failed (2 mb max per image)"),
-                setError(false)
+                setError(false),
+                setUploading(false),
+                
                 )
             }
         else{
@@ -109,14 +113,14 @@ const CreateListing = () => {
     const handleSubmit=async(e)=>{
         e.preventDefault()
         try {
-            const res=fetch("/api/listing/create",{
+            const res=await fetch("/api/listing/create",{
                 method:"POST",
                 headers:{
                         'Content-Type': 'application/json',
                 },
                 body:JSON.stringify({
                     ...formData,
-                    useRef:currentUser._id
+                    userRef:currentUser._id
                 })
             })
             const data=await res.json();
@@ -336,7 +340,7 @@ const CreateListing = () => {
                             ))}
                         <button
                             disabled={loading || uploading}
-                            className='p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80'
+                            className='p-3 bg-green-600 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80'
                         >
                             {loading ? 'Creating...' : 'Create listing'}
                         </button>

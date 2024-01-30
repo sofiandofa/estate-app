@@ -24,7 +24,9 @@ function Header() {
                         {
                             currentUser
                             ?
-                            (<img src={currentUser.avatar} alt="" className="rounded-full h-7 w-7 object-cover" />)
+                            (<Link to={"/profile"}>
+                                <img src={currentUser.avatar} alt="" className="rounded-full h-7 w-7 object-cover" />
+                            </Link>)
                             :
                             (<Link to="sign-in" >sign in </Link>)
                         }

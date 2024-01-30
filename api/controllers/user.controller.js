@@ -17,6 +17,7 @@ export const updateUser=async (req,res,next)=>{
                 username:req.body.username,
                 email:req.body.email,
                 password:req.body.password,
+                avatar:req.body.avatar
             },
         },
         {new:true}
@@ -53,5 +54,16 @@ export const getUserListings=async(req,res,next)=>{
         }
     }else{
         return next(errorHandler(401, 'You can only view your own listings!'));
+    }
+}
+
+export const getUser=async(req,res,next)=>{
+    try {
+        const user=await User.findById(req.params.id)
+        if(!user) return next(handleErorr(404,'user Not found'))    
+        const {password:pass,...rest}=user._doc
+        res.status(201).json(rest)
+    } catch (error) {
+        next(error)
     }
 }

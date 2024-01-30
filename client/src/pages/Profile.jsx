@@ -7,7 +7,7 @@ import {
     uploadBytesResumable,
 } from 'firebase/storage';
 import { app } from '../firebase';
-
+import {FaTrash,FaSignOutAlt} from 'react-icons/fa'
 import {
     updateUserFailure,updateUserStart,updateUserSuccess,
     deleteUserFailure,deleteUserStart,deleteUserSuccess,
@@ -49,8 +49,10 @@ const Profile = () => {
             setFileUploadError(true);
             },
             () => {
-                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) =>
-                setFormData({ ...formData, avatar: downloadURL })
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) =>{
+                    setFormData({ ...formData, avatar: downloadURL })
+                    
+                }
                 );
             }
             );
@@ -112,7 +114,7 @@ const Profile = () => {
     const handleShowListings=async(e)=>{
         e.preventDefault()
         try {
-            const res=fetch(`/api/user/listings/${currentUser._id}`)
+            const res=await fetch(`/api/user/listings/${currentUser._id}`)
             const data=await res.json()
             if(data.success===false){
                 setShowListingsError(true)
@@ -136,17 +138,17 @@ const Profile = () => {
             if(data.success===false){
                 console.log(data.message)
             }
-            setUserListings(prev=>prev.filter(listing=> listing.id!==listingId ))
+            setUserListings(prev=> prev.filter(listing=> listing._id!==listingId ))
         } catch (error) {
             console.log(error)
         }
     }
 
     return (
-        <div className=" max-w-lg mx-auto p-2 bg-slate-200">
+        <div className=" max-w-2xl mx-auto p-2 bg-slate-200 flex flex-col items-center my-4 shadow-sm     ">
             <h1 className=" text-center"> Profile </h1>
             
-            <div>
+            <div className="mb-2">
                 <input 
                     type="file"  
                     hidden 
@@ -172,7 +174,7 @@ const Profile = () => {
                     ''
                 )}
             </p>
-            <form onSubmit={submitHanlder}>
+            <form onSubmit={submitHanlder} className="flex flex-col items-center  justify-center gap-3 w-full">
                 <input type="text" id="username" 
                 onChange={handleChange} 
                 placeholder="username"
@@ -189,17 +191,20 @@ const Profile = () => {
                     {loading ? "loading..." : "update"}
                 </button>
             </form>
-            <Link to={"/create-listing"} className="bg-green-700 text-white font-semibold  w-3/4 mb-4 p-1 hover:opacity-90">
+            <Link to={"/create-listing"} className="bg-green-700 text-white font-semibold  w-3/4 mb-4 p-1 hover:opacity-90 text-center">
                     create lising
             </Link>
-            <div className='flex justify-between mt-5'>
+            <div className='flex justify-between mt-2 w-3/4'>
                 <span
                 onClick={handleDeleteUser}
-                className='text-red-600 cursor-pointer'
-                >
+                className='text-red-500 cursor-pointer border border-slate-500 px-1 text-sm rounded-md flex items-center gap-1  hover:bg-red-600 hover:text-white hover:border-none'>
+                
+                <FaTrash/>
                 Delete account
                 </span>
-                <span onClick={handleSignOut} className='text-red-600 cursor-pointer'>
+                <span onClick={handleSignOut} 
+                className='text-red-500 cursor-pointer border border-slate-500 px-1 text-sm rounded-md flex items-center gap-1 hover:bg-red-600 hover:text-white hover:border-none'>
+                <FaSignOutAlt/>
                 Sign out
                 </span>
             </div>
@@ -216,42 +221,44 @@ const Profile = () => {
                 {showListingsError ? 'Error showing listings' : ''}
             </p>
             {userListings && userListings.length > 0 && (
-                    <div className='flex flex-col gap-4'>
-                    <h1 className='text-center mt-7 text-2xl font-semibold'>
-                        Your Listings
-                    </h1>
-                    {userListings.map((listing) => (
-                        <div
-                        key={listing._id}
-                        className='border rounded-lg p-3 flex justify-between items-center gap-4'
-                        >
-                        <Link to={`/listing/${listing._id}`}>
-                            <img
-                            src={listing.imageUrls[0]}
-                            alt='listing cover'
-                            className='h-16 w-16 object-contain'
-                            />
-                        </Link>
-                        <Link
-                            className='text-slate-700 font-semibold  hover:underline truncate flex-1'
-                            to={`/listing/${listing._id}`}
-                        >
-                            <p>{listing.name}</p>
-                        </Link>
+                    <div className='flex flex-col gap-4 w-full'>
+                            <h1 className='text-center mt-7 text-2xl font-semibold'>
+                                Your Listings
+                            </h1>
+                            <div className="flex flex-col sm:flex-row flex-wrap items-center gap-3   justify-center ">
+                                {userListings.map((listing) => (
+                                    <div
+                                        key={listing._id}
+                                        className=' shadow-md rounded-lg p-3 flex flex-col  justify-between items-center gap-4 w-30  bg-white'
+                                    >
+                                        <Link to={`/listing/${listing._id}`}>
+                                            <img
+                                            src={listing.imageUrls[0]}
+                                            alt='listing cover'
+                                            className='h-16 w-full object-contain'
+                                            />
+                                        </Link>
+                                        <Link
+                                            className='text-slate-700 font-semibold  hover:underline truncate flex-1'
+                                            to={`/listing/${listing._id}`}
+                                        >
+                                            <p>{listing.name}</p>
+                                        </Link>
 
-                        <div className='flex flex-col item-center'>
-                            <button
-                            onClick={() => handleListingDelete(listing._id)}
-                            className='text-red-700 uppercase'
-                            >
-                            Delete
-                            </button>
-                            <Link to={`/update-listing/${listing._id}`}>
-                            <button className='text-green-700 uppercase'>Edit</button>
-                            </Link>
-                        </div>
-                        </div>
-                    ))}
+                                        <div className='flex flex-row gap-2 item-center'>
+                                            <button
+                                            onClick={() => handleListingDelete(listing._id)}
+                                            className='text-white px-2 py-1 w-20 border bg-red-600 '
+                                            >
+                                            Delete
+                                            </button>
+                                            <Link to={`/update-listing/${listing._id}`}>
+                                            <button className='text-white px-2 py-1 w-20 uppercase bg-green-500'>Edit</button>
+                                            </Link>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                     </div>
                 )}
         </div>

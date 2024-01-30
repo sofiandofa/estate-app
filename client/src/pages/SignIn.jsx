@@ -27,12 +27,12 @@ function SignIn() {
                     'Content-Type': 'application/json',
                 },
             })
-            const data = res.json()
+            const data = await res.json()
             if (data.success === false) {
                 dispatch(signInFailure(data.message))
                 return
             }
-            dispatch(signInSuccess(data.message))
+            dispatch(signInSuccess(data))
             navigate("/")
         } catch (error) {
             dispatch(signInFailure(error.message))

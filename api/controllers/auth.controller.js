@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken'
 
 export const signUp=async(req,res,next)=>{
     const{username,email,password}=req.body;
-    const hashedPassword=bcryptjs.hashSync(password,10)
+    const hashedPassword=bcryptjs.hashSync(password,11)
     try {
         const newUser=User.create({username,email,password:hashedPassword})
         await newUser.save
@@ -16,7 +16,7 @@ export const signUp=async(req,res,next)=>{
     }
 } 
 
-export const signIn=async(req,res)=>{
+export const signIn=async(req,res,next)=>{
     const {email,password}=req.body;
     try {
         const valideUser=await User.findOne({email})        
@@ -25,13 +25,13 @@ export const signIn=async(req,res)=>{
         if(!validPassword) return next(handleErorr(404,'Wrong credentials!'));
         const {password:pass,...rest}=valideUser._doc
         const token=jwt.sign({id:valideUser._id},process.env.JWT_SECRET)
-        res.status(201).json(rest).cookie('access_token',token,{httpOnly:true})
+        res.cookie('access_token',token,{httpOnly:true,maxAge:14*20*3600000}).status(201).json(rest)
     } catch (error) {
         next(error)
     }
 }
 
-export const google =async(req,res)=>{
+export const google =async(req,res,next)=>{
     
     const{username,email,avatar}=req.body
     try {
@@ -61,10 +61,10 @@ export const google =async(req,res)=>{
         next(error)
     }
 }   
-export const signOut =(req,res)=>{
+export const signOut =(req,res,next)=>{
     try {
-        req.clearCookie("access_token")
-        req.json('the user sign out ')
+        res.clearCookie("access_token")
+        res.json('the user sign out ')
     } catch (error) {
         next(error)
     }
