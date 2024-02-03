@@ -15,6 +15,43 @@ const Search = () => {
     const[listings,setListings]=useState([])
     const[loading,setLoading]=useState(false)
     const[showMore,setShowMore]=useState(false)
+    useEffect(()=>{
+        const urlParams = new URLSearchParams(location.search);
+        const searchTermFromUrl = urlParams.get('searchTerm');
+        const typeFromUrl = urlParams.get('type');
+        const parkingFromUrl = urlParams.get('parking');
+        const furnishedFromUrl = urlParams.get('furnished');
+        const offerFromUrl = urlParams.get('offer');
+        const sortFromUrl = urlParams.get('sort');
+        const orderFromUrl = urlParams.get('order');
+        if(searchTermFromUrl||typeFromUrl||parkingFromUrl||furnishedFromUrl||offerFromUrl||sortFromUrl||orderFromUrl){
+            setSidebardata({
+                searchTerm: searchTermFromUrl || '',
+                type: typeFromUrl || 'all',
+                parking: parkingFromUrl === 'true' ? true : false,
+                furnished: furnishedFromUrl === 'true' ? true : false,
+                offer: offerFromUrl === 'true' ? true : false,
+                sort: sortFromUrl || 'created_at',//createdAt
+                order: orderFromUrl || 'desc',
+            })
+        }
+        const fetchListings=async()=>{
+            setLoading(true)
+            setShowMore(false);
+            const searchQuery=urlParams.toString()
+            const res=await fetch(`/api/listing/get?${searchQuery}`)
+            const data =await res.json()
+            if (data.length > 8) {
+                setShowMore(true);
+            } else {
+                setShowMore(false);
+            }
+            setListings(data)
+            setLoading(false)
+        }
+        fetchListings()
+
+    },[location.search])
 
     const handleChange=(e)=>{
         if(e.target.id==="all"||e.target.id==="rent"||e.target.id==="sale"){
@@ -45,48 +82,11 @@ const Search = () => {
         navigate(`/search?${urlQuery}`)
     }
 
-    useEffect(()=>{
-        const urlParams=new URLSearchParams()
-        const searchTermFromUrl = urlParams.get('searchTerm');
-        const typeFromUrl = urlParams.get('type');
-        const parkingFromUrl = urlParams.get('parking');
-        const furnishedFromUrl = urlParams.get('furnished');
-        const offerFromUrl = urlParams.get('offer');
-        const sortFromUrl = urlParams.get('sort');
-        const orderFromUrl = urlParams.get('order');
-        if(searchTermFromUrl||typeFromUrl||parkingFromUrl||furnishedFromUrl||offerFromUrl||sortFromUrl||orderFromUrl){
-            setSidebardata({
-                searchTerm: searchTermFromUrl || '',
-                type: typeFromUrl || 'all',
-                parking: parkingFromUrl === 'true' ? true : false,
-                furnished: furnishedFromUrl === 'true' ? true : false,
-                offer: offerFromUrl === 'true' ? true : false,
-                sort: sortFromUrl || 'created_at',//createdAt
-                order: orderFromUrl || 'desc',
-            })
-        }
-        const fetchListings=async()=>{
-            setLoading(true)
-            const searchQuery=urlParams.toString()
-            const res=await fetch(`api/listings/get?${searchQuery}`)
-            const data =await res.json()
-            if(data.length<9){
-                setShowMore(false)
-                setLoading(false)
-            }
-            setListings(data)
-            setLoading(false)
-        }
-        fetchListings()
-
-    },[location.search])
 
     const onShowMoreClick=async()=>{
-        const urlParams=new URLSearchParams()
+        const urlParams=new URLSearchParams(location.search)
         const listinglength=listings.length
-        if(listinglength>8){
-            urlParams.set("startIndex",listinglength)
-        }
+        urlParams.set("startIndex",listinglength)
         const urlQuery=urlParams.toString()
         const res = await fetch(`/listing/get/${urlQuery}`)
         const data = await res.json()
@@ -96,113 +96,82 @@ const Search = () => {
         setListings({...listings,...data})
     }
     return (
-        <div className='flex flex-col md:flex-row'>
-                <div className='p-7  border-b-2 md:border-r-2 md:min-h-screen'>
-                    <form onSubmit={handleSubmit} className='flex flex-col gap-8'>
-                    <div className='flex items-center gap-2'>
-                        <label className='whitespace-nowrap font-semibold'>
-                        Search Term:
-                        </label>
-                        <input
-                        type='text'
-                        id='searchTerm'
-                        placeholder='Search...'
-                        className='border rounded-lg p-3 w-full'
-                        value={sidebardata.searchTerm}
+        <div className=" flex flex-col sm:flex-row">
+            {/*  */}
+            <form onSubmit={handleSubmit} className=" bg-slate-100 flex flex-col  gap-2 h-fit sm:h-screen p-3 shadow-md border border-r-2">
+                <div className="flex items-center  gap-1 w-fit border border-slate-300 rounded-md px-2 py-1 hover:bg-slate-200  transition-colors">
+                    <label htmlFor="">search:</label>
+                    <input type="text" 
+                        className="border border-gray-300 rounded-lg py-1 px-1 font-medium text-gray-500 text-sm"  
                         onChange={handleChange}
-                        />
-                    </div>
-                    <div className='flex gap-2 flex-wrap items-center'>
-                        <label className='font-semibold'>Type:</label>
-                        <div className='flex gap-2'>
-                        <input
-                            type='checkbox'
-                            id='all'
-                            className='w-5'
+                        value={sidebardata.searchTerm}
+                        placeholder='search...'
+                        id="searchTerm"
+                    />
+                </div>
+                <div className="flex items-center  flex-wrap justify-center gap-1 border shadow-sm border-slate-300 rounded-md w-fit px-2 py-1 bg-white sm:w-[300px] ">
+                    <span className="flex items-center gap-1 border border-slate-300 rounded-md px-2 py-1 hover:bg-slate-200  transition-colors">
+                        <label htmlFor="" className='w-20 whitespace-nowrap'>Rent & Sale</label>
+                        <input type="checkbox"  
+                            id="all" className="w-4 h-4 flex-1 cursor-pointer" 
                             onChange={handleChange}
                             checked={sidebardata.type === 'all'}
-                        />
-                        <span>Rent & Sale</span>
-                        </div>
-                        <div className='flex gap-2'>
-                        <input
-                            type='checkbox'
-                            id='rent'
-                            className='w-5'
+                            />
+                    </span>
+                    <span className="flex items-center gap-1 border border-slate-300 rounded-md px-2 py-1 hover:bg-slate-200  transition-colors">
+                        <label htmlFor="" className=' w-20'>Rent</label>
+                        <input type="checkbox"  
+                            id="rent" 
+                            className="w-4 h-4 flex-1 cursor-pointer" 
                             onChange={handleChange}
                             checked={sidebardata.type === 'rent'}
-                        />
-                        <span>Rent</span>
-                        </div>
-                        <div className='flex gap-2'>
-                        <input
-                            type='checkbox'
-                            id='sale'
-                            className='w-5'
+                            />
+                    </span>
+                    <span className="flex items-center gap-1 border border-slate-300 rounded-md px-2 py-1 hover:bg-slate-200  transition-colors">
+                        <label htmlFor="" className=' w-20'>Sale</label>
+                        <input type="checkbox"  
+                            id="sale" className="w-4 h-4 flex-1 cursor-pointer" 
                             onChange={handleChange}
                             checked={sidebardata.type === 'sale'}
-                        />
-                        <span>Sale</span>
-                        </div>
-                        <div className='flex gap-2'>
-                        <input
-                            type='checkbox'
-                            id='offer'
-                            className='w-5'
-                            onChange={handleChange}
-                            checked={sidebardata.offer}
-                        />
-                        <span>Offer</span>
-                        </div>
-                    </div>
-
-                    <div className='flex gap-2 flex-wrap items-center'>
-                        <label className='font-semibold'>Amenities:</label>
-                        <div className='flex gap-2'>
-                        <input
-                            type='checkbox'
-                            id='parking'
-                            className='w-5'
-                            onChange={handleChange}
-                            checked={sidebardata.parking}
-                        />
-                        <span>Parking</span>
-                        </div>
-                        <div className='flex gap-2'>
-                        <input
-                            type='checkbox'
-                            id='furnished'
-                            className='w-5'
-                            onChange={handleChange}
-                            checked={sidebardata.furnished}
-                        />
-                        <span>Furnished</span>
-                        </div>
-                    </div>
-                    <div className='flex items-center gap-2'>
-                        <label className='font-semibold'>Sort:</label>
-                        <select
-                        onChange={handleChange}
-                        defaultValue={'created_at_desc'}
-                        id='sort_order'
-                        className='border rounded-lg p-3'
-                        >
-                        <option value='regularPrice_desc'>Price high to low</option>
-                        <option value='regularPrice_asc'>Price low to hight</option>
-                        <option value='createdAt_desc'>Latest</option>
-                        <option value='createdAt_asc'>Oldest</option>
-                        </select>
-                    </div>
-                    <button className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95'>
-                        Search
-                    </button>
-                    </form>
+                            />
+                    </span>
                 </div>
-                <div className='flex-1'>
-                    <h1 className='text-3xl font-semibold border-b p-3 text-slate-700 mt-5'>
-                    Listing results:
-                    </h1>
-                    <div className='p-7 flex flex-wrap gap-4'>
+                <div  className="flex items-center gap-1 w-fit border border-slate-300 rounded-md px-2 py-1 hover:bg-slate-200  transition-colors">
+                    <label htmlFor="">Parking</label>
+                    <input type="checkbox"  
+                        id="parking" className="w-4 h-4 flex-1 cursor-pointer" 
+                        onChange={handleChange}
+                        checked={sidebardata.parking}
+                        />
+                </div>
+                <div className="flex items-center gap-1 border w-fit border-slate-300 rounded-md px-2 py-1 hover:bg-slate-200  transition-colors">
+                    <label htmlFor="">Offer</label>
+                    <input type="checkbox"  
+                        id="offer" className="w-4 h-4 flex-1 cursor-pointer"
+                        checked={sidebardata.offer}
+                        onChange={handleChange}
+                        />
+                </div>
+                <div>
+                    <select  
+                        id="" className="border border-slate-400/50 outline-none p-1 rounded-md"
+                        onChange={handleChange}
+                        
+                        >
+                        <option value='createdAt_desc'>latest</option>
+                        <option value="createdAt_asc">oldest</option>
+                        <option value="regularPrice_desc">price hight to low</option>
+                        <option value="regularPrice_asc">price low to hight</option>
+                    </select>
+                </div>
+                <button className=' bg-slate-600 hover:opacity-80 text-white font-medium rounded-md py-1'>
+                    search
+                </button>
+            </form>
+            {/*  */}
+            <div className='p-8 bg-slate-100/60 flex-1'>
+                <h1 className='text-3xl  font-semibold text-slate-700'> Listings:  </h1>
+                <div className='p-7 flex flex-wrap gap-4'>
                     {!loading && listings.length === 0 && (
                         <p className='text-xl text-slate-700'>No listing found!</p>
                     )}
@@ -211,14 +180,13 @@ const Search = () => {
                         Loading...
                         </p>
                     )}
-
+                <div className='flex-1 cards-container mt-5'>
                     {!loading &&
                         listings &&
-                        listings.map((listing) => (
-                        <ListingItem key={listing._id} listing={listing} />
-                        ))}
-
-                    {showMore && (
+                        listings.map((listing) => <ListingItem key={listing._id} listing={listing} />)
+                    }
+                </div>
+                {showMore && (
                         <button
                         onClick={onShowMoreClick}
                         className='text-green-700 hover:underline p-7 text-center w-full'
@@ -226,9 +194,9 @@ const Search = () => {
                         Show more
                         </button>
                     )}
-                    </div>
-                </div>
-        </div>
+            </div>
+            </div>
+    </div>
     )
 }
 

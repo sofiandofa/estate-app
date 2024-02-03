@@ -61,35 +61,36 @@ export const getListing =async(req,res,next)=>{
 export const getListings=async(req,res,next)=>{
     try {
         const limit =parseInt(req.query.limit)||9
-        const offer=req.query.offer
+        let offer=req.query.offer
         const satrtIndex=parseInt(req.query.satrtIndex)||0
-        if(req.query.offer==="false"||req.query.offer===undefined){
+        if(offer==="false"||offer===undefined){
             offer={$in:[false,true]}
         }
-        const furnished=req.query.furnished
-        if(req.query.furnished==="false"||req.query.furnished===undefined){
+        let furnished=req.query.furnished
+        if(furnished==="false"||furnished===undefined){
             furnished={$in:[false,true]}
         }
-        const parking=req.query.parking;
-        if(req.query.parking==="false"||req.query.parking===undefined){
+        let parking=req.query.parking;
+        if(parking==='false'||parking===undefined){
             parking={$in:[false,true]}
         }
-        const type=req.query.type
-        if(req.query.type==="false"||req.query.type==='all'){
+        let type=req.query.type
+        if(type===undefined||type==='all'){
             type={$in:["sale","rent"]}
         }
+        
         const searchTerm=req.query.searchTerm||""
 
         const sort=req.query.sort|| "createdAt"
-        const order=req.query.sort||"desc"
+        const order=req.query.order||"desc"
         const updatedListing=await Listing.find({
-            name:{$regex:searchTerm,$option:'i'},
+            name:{$regex:searchTerm,$options:'i'},
             type,
             parking,
             furnished,
             offer,
-        }).sort({[sort]:order}).skip(satrtIndex)
-        res.status(201).json(updatedListing)
+        }).sort({[sort]:order}).skip(satrtIndex).limit(limit)
+        return res.status(201).json(updatedListing)
     } catch (error) {
         next(error)
     }
