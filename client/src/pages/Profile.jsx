@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from "react"
 import {useSelector,useDispatch}from "react-redux"
 import {
@@ -145,8 +146,8 @@ const Profile = () => {
     }
 
     return (
-        <div className=" max-w-2xl mx-auto p-2 bg-slate-200 flex flex-col items-center my-4 shadow-sm     ">
-            <h1 className=" text-center"> Profile </h1>
+        <div className=" max-w-3xl mx-auto p-2 bg-slate-100 flex flex-col items-center my-4 shadow-sm rounded-md     ">
+            <h1 className="text-center  text-4xl font-semibold  my-4 text-slate-600"> Profile </h1>
             
             <div className="mb-2">
                 <input 
@@ -157,7 +158,7 @@ const Profile = () => {
                     accept='image/*'
                 />
                 <img src={currentUser.avatar} alt="" 
-                    className=" self-center rounded-full h-7 w-7" 
+                    className=" self-center rounded-full h-14 w-14 object-cover" 
                     onClick={()=>fileRef.current.click()}
                 />
             </div>
@@ -174,7 +175,7 @@ const Profile = () => {
                     ''
                 )}
             </p>
-            <form onSubmit={submitHanlder} className="flex flex-col items-center  justify-center gap-3 w-full">
+            <form onSubmit={submitHanlder} className="flex flex-col items-center  justify-center gap-5 w-full">
                 <input type="text" id="username" 
                 onChange={handleChange} 
                 placeholder="username"
@@ -187,24 +188,24 @@ const Profile = () => {
                 onChange={handleChange}
                 placeholder="password"
                 className=" w-3/4 mx-auto p-1 rounded-md "/>
-                <button disabled={loading} className="bg-green-400 w-3/4 mb-4 p-1 hover:opacity-90">
+                <button disabled={loading} className="bg-gray-400 w-2/4 text-white font-semibold mb-4 p-1 hover:opacity-90">
                     {loading ? "loading..." : "update"}
                 </button>
             </form>
-            <Link to={"/create-listing"} className="bg-green-700 text-white font-semibold  w-3/4 mb-4 p-1 hover:opacity-90 text-center">
+            <Link to={"/create-listing"} className="bg-gray-400 text-white font-semibold  w-2/4 mb-4 p-1 rounded-md hover:opacity-90 text-center">
                     create lising
             </Link>
             <div className='flex justify-between mt-2 w-3/4'>
                 <span
                 onClick={handleDeleteUser}
-                className='text-red-500 cursor-pointer border border-slate-500 px-1 text-sm rounded-md flex items-center gap-1  hover:bg-red-600 hover:text-white hover:border-none'>
+                className='text-red-400 mb-4 cursor-pointer border font-medium border-slate-500 px-2 py-1 text-sm rounded-md flex items-center gap-2  hover:bg-red-500 hover:text-white hover:border-none'>
                 
-                <FaTrash/>
+                <FaTrash className=" text-slate-500"/>
                 Delete account
                 </span>
                 <span onClick={handleSignOut} 
-                className='text-red-500 cursor-pointer border border-slate-500 px-1 text-sm rounded-md flex items-center gap-1 hover:bg-red-600 hover:text-white hover:border-none'>
-                <FaSignOutAlt/>
+                className='text-red-400 cursor-pointer border font-medium border-slate-500 px-2  py-1 text-sm rounded-md flex items-center gap-2 hover:bg-red-500 hover:text-white hover:border-none'>
+                <FaSignOutAlt className=" text-slate-500"/>
                 Sign out
                 </span>
             </div>
@@ -214,7 +215,7 @@ const Profile = () => {
             </p>
             <button 
             onClick={handleShowListings}
-                className=" bg-green-500 text-white font-semibold px-2 py-1 rounded-md">
+                className=" bg-slate-600 text-white font-semibold px-3 py-1 rounded-md">
                     show listings
             </button>
             <p className='text-red-700 mt-5'>

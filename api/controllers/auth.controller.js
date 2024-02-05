@@ -39,7 +39,7 @@ export const google =async(req,res,next)=>{
         if(validUser){
             const token=jwt.sign({id:validUser._id},process.env.JWT_SECRET)
             const{password:pass,...rest}=validUser._doc
-            res.status(201).json(rest).cookie('access_token',token,{httpOnly:true})
+            res.cookie('access_token',token,{httpOnly:true}).status(201).json(rest)
         }else{
             const generatedPassword =
             Math.random().toString(36).slice(-8) +
@@ -55,7 +55,7 @@ export const google =async(req,res,next)=>{
 
             const token=jwt.sign({id:newUser._id},process.env.JWT_SECRET)
             const{password:pass,...rest}=newUser._doc
-            res.status(201).json(rest).cookie('access_token',token,{httpOnly:true})
+            res.cookie('access_token',token,{httpOnly:true}).status(201).json(rest)
         }
     } catch (error) {
         next(error)

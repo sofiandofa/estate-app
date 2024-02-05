@@ -57,11 +57,11 @@ function SignIn() {
                     {loading ? "loading..." : "sign in"}
                 </button>
                 <OAuth/>
+                <span className=" text-sm font-medium text-slate-700">
+                    you dont have account 
+                    <Link to='/sign-up' className="text-red-500 hover:opacity-80"> sign up </Link>
+                </span>
             </form>
-            <span className=" ml-1 text-xs">
-                you dont have account 
-                <Link to='/sign-up' className="text-red-500 hover:opacity-80"> sign up </Link>
-            </span>
             {error && <p className="text-red-500"> {error} </p>}
         </div>
     )
