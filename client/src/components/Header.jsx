@@ -21,11 +21,11 @@ function Header() {
         
     },[location.search])
     return (
-        <div className=" bg-slate-200">
+        <div className="header-bg py-1 shadow-lg">
                 <div className="container mx-auto flex  justify-between items-center h-11" >
-                    <Link to="/" className=" font-semibold text-slate-800"> 
+                    <Link to="/" className=" font-semibold text-slate-600"> 
                         Soufiyan
-                        <span className="text-slate-500">Estate</span> 
+                        <span className="text-slate-100">Estate</span> 
                     </Link>
                     <form onSubmit={submitHandler} className=" flex items-center justify-center bg-white rounded-lg p-1">
                         <input type="text" name="" id="" className=" bg-transparent outline-none" placeholder="search" 
@@ -34,7 +34,7 @@ function Header() {
                             <FaSearch></FaSearch>
                         </button>
                     </form>
-                    <div className="flex gap-3 font-medium text-gray-600">
+                    <div className="flex gap-3 font-medium text-gray-100">
                         <Link to="home">Home </Link>
                         <Link to="about" >About </Link>
                         {

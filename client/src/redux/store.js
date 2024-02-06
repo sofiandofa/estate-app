@@ -2,9 +2,9 @@ import { configureStore,combineReducers} from "@reduxjs/toolkit";
 import {persistReducer,persistStore} from "redux-persist"
 import userReducer from './user/userSlice.js'
 import storage from 'redux-persist/lib/storage';
+import signUpReducer from "./user/signUpSlice.js"
 
-
-const rootReducer=combineReducers({user:userReducer})
+const rootReducer=combineReducers({user:userReducer,signUp:signUpReducer})
 const persistConfig={
     key:"root",
     storage,

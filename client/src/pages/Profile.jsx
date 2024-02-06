@@ -14,6 +14,7 @@ import {
     deleteUserFailure,deleteUserStart,deleteUserSuccess,
     signOutUserFailure,signOutUserStart,signOutUserSuccess
 }from "../redux/user/userSlice"
+import {signOut} from '../redux/user/signUpSlice'
 import { Link } from "react-router-dom";
 
 const Profile = () => {
@@ -100,6 +101,7 @@ const Profile = () => {
     const handleSignOut =async()=>{
         try {
             dispatch(signOutUserStart())
+            dispatch(signOut())
             const res=await fetch(`/api/auth/sign-out`)
             const data=await res.json()
 
@@ -188,14 +190,14 @@ const Profile = () => {
                 onChange={handleChange}
                 placeholder="password"
                 className=" w-3/4 mx-auto p-1 rounded-md "/>
-                <button disabled={loading} className="bg-gray-400 w-2/4 text-white font-semibold mb-4 p-1 hover:opacity-90">
+                <button disabled={loading} className="bg-gray-400 w-2/4 rounded-md text-white font-semibold mb-4 p-1 hover:opacity-90">
                     {loading ? "loading..." : "update"}
                 </button>
             </form>
             <Link to={"/create-listing"} className="bg-gray-400 text-white font-semibold  w-2/4 mb-4 p-1 rounded-md hover:opacity-90 text-center">
                     create lising
             </Link>
-            <div className='flex justify-between mt-2 w-3/4'>
+            <div className='flex justify-between items-center mt-2 w-3/4'>
                 <span
                 onClick={handleDeleteUser}
                 className='text-red-400 mb-4 cursor-pointer border font-medium border-slate-500 px-2 py-1 text-sm rounded-md flex items-center gap-2  hover:bg-red-500 hover:text-white hover:border-none'>

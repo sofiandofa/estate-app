@@ -40,29 +40,31 @@ function SignIn() {
         }
     }
     return (
-        <div className="w-1/2 mx-auto  bg-slate-100 my-20 shadow-md">
-            <h2 className=" font-medium mx-auto  w-fit  py-5  text-lg ">sign in</h2>
-            <form onSubmit={submitHandler} className="flex flex-col items-center gap-6">
+        <div className="sign-up ">
+        <div className="w-3/4  mx-auto  border-white border-8  md:w-1/2 pt-10 pb-8  rounded-xl shadow-md bg-[#066ac169]">
+            <h2 className=" font-semi-bold mx-auto text-white w-fit  pt-4 text-3xl pb-6 ">welcom back</h2>
+            <form onSubmit={submitHandler} className="flex flex-col items-center gap-7">
                 <input type="email"
                     id="email"
                     placeholder="email"
-                    className=" w-3/4 mx-auto p-1 rounded-md outline-none"
+                    className=" w-3/4 mx-auto p-2 rounded-md outline-none"
                     onChange={handleChange} />
                 <input type="password"
                     id="password"
                     placeholder="password"
-                    className=" w-3/4 mx-auto p-1 rounded-md outline-none"
+                    className=" w-3/4 mx-auto p-2 rounded-md outline-none"
                     onChange={handleChange} />
-                <button disabled={loading} className="bg-gray-300 w-3/4 mb-4 p-1 hover:opacity-90">
+                <button disabled={loading} className="bg-[#a2fcecab] rounded-md w-3/4 mb-0 p-2 hover:opacity-90">
                     {loading ? "loading..." : "sign in"}
                 </button>
                 <OAuth/>
-                <span className=" text-sm font-medium text-slate-700">
-                    you dont have account 
-                    <Link to='/sign-up' className="text-red-500 hover:opacity-80"> sign up </Link>
+                <span className=" text-lg font-semi-bold text-white">
+                    you dont have account !!
+                    <Link to='/sign-up' className="text-red-600 hover:opacity-80"> sign up </Link>
                 </span>
             </form>
             {error && <p className="text-red-500"> {error} </p>}
+        </div>
         </div>
     )
 }
