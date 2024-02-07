@@ -11,7 +11,7 @@ import CreateListing from './pages/CreateListing.jsx'
 import UpdateListing from './pages/UpdateListing.jsx'
 import Listing from './pages/Listing.jsx'
 import Search from './pages/Search.jsx'
-import VerifyEmail from './pages/verifyEmail.jsx'
+import VerifyEmail from './pages/VerifyEmail.jsx'
 
 function App() {
 
