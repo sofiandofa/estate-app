@@ -33,16 +33,17 @@ function Home() {
         fetchOfferListings()
     },[])
     return (
+        <>
         <div className='home-bg'>
       {/* top */}
             <div className='flex flex-col gap-6 p-28 px-3 max-w-6xl mx-auto'>
-                <h1 className='text-slate-800/90 font-bold text-3xl lg:text-6xl'>
+                <h1 className='text-slate-800/90 font-bold text-4xl lg:text-6xl'>
                 Find your next <span className='text-slate-200'>perfect</span>
                 <br />
-                place with ease
+                place with easy way
                 </h1>
-                <div className='text-gray-200 text-xs sm:text-sm'>
-                Sahand Estate is the best place to find your next perfect place to
+                <div className='text-gray-200 text-sm sm:text-sm'>
+                Soufiyan Estate is the best place to find your next perfect place to
                 live.
                 <br />
                 We have a wide range of properties for you to choose from.
@@ -54,8 +55,7 @@ function Home() {
                 Let s get started...
                 </Link>
             </div>
-
-            {/* swiper */}
+        </div>
             <Swiper navigation>
                 {offerListings &&
                 offerListings.length > 0 &&
@@ -72,6 +72,7 @@ function Home() {
                     </SwiperSlide>
                 ))}
             </Swiper>
+            {/* swiper */}
 
             {/* listing results for offer, sale and rent */}
 
@@ -116,7 +117,7 @@ function Home() {
                 </div>
                 )}
             </div>
-    </div>
+    </>
     )
 }
 

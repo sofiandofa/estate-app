@@ -55,7 +55,7 @@ function SignUp() {
     }
 
     return (
-            <div className="sign-up ">
+            <div className="sign-up sm:pt-24 pt-5 ">
                 <div className="w-3/4  mx-auto  border-white border-8  md:w-1/2 py-10 rounded-lg shadow-md bg-[#066ac169]" >
                     <h2 className=" font-semi-bold mx-auto text-slate-200   w-fit  py-5  text-2xl ">sign up</h2>
                     <form onSubmit={submitHandler} className="flex flex-col items-center gap-6">

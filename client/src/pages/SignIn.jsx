@@ -40,7 +40,7 @@ function SignIn() {
         }
     }
     return (
-        <div className="sign-up ">
+        <div className="sign-up sm:pt-24 pt-5 ">
         <div className="w-3/4  mx-auto  border-white border-8  md:w-1/2 pt-10 pb-8  rounded-xl shadow-md bg-[#066ac169]">
             <h2 className=" font-semi-bold mx-auto text-white w-fit  pt-4 text-3xl pb-6 ">welcom back</h2>
             <form onSubmit={submitHandler} className="flex flex-col items-center gap-7">
@@ -58,12 +58,12 @@ function SignIn() {
                     {loading ? "loading..." : "sign in"}
                 </button>
                 <OAuth/>
-                <span className=" text-lg font-semi-bold text-white">
+                <span className=" text-lg font-semi-bold text-white mb-2">
                     you dont have account !!
                     <Link to='/sign-up' className="text-red-600 hover:opacity-80"> sign up </Link>
                 </span>
             </form>
-            {error && <p className="text-red-500"> {error} </p>}
+            {error && <p className="bg-red-500/80 text-center text-gray-100 mx-1 rounded-md py-1"> {error} </p>}
         </div>
         </div>
     )

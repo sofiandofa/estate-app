@@ -200,7 +200,7 @@ const Profile = () => {
             <div className='flex justify-between items-center mt-2 w-3/4'>
                 <span
                 onClick={handleDeleteUser}
-                className='text-red-400 mb-4 cursor-pointer border font-medium border-slate-500 px-2 py-1 text-sm rounded-md flex items-center gap-2  hover:bg-red-500 hover:text-white hover:border-none'>
+                className='text-red-400  cursor-pointer border font-medium border-slate-500 px-2 py-1 text-sm rounded-md flex items-center gap-2  hover:bg-red-500 hover:text-white hover:border-none'>
                 
                 <FaTrash className=" text-slate-500"/>
                 Delete account
