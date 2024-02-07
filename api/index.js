@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import dotenv from "dotenv"
 import cookieParser from 'cookie-parser';
 import listingRouter from "./routes/listing.route.js"
+import path from "path"
 dotenv.config()
 
 
