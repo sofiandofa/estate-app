@@ -31,7 +31,7 @@ export const deleteListing=async(req,res,next)=>{
 }
 
 export const updateListing=async(req,res,next)=>{
-    const listing=await findById(req.params.id)
+    const listing=await Listing.findById(req.params.id)
     if(req.user.id!==listing.userRef){
         return next(handleErorr(401,"you can only update your listing"))
     }

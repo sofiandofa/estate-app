@@ -27,6 +27,7 @@
     }
     .home-bg{
         height: calc(100vh - 52px);
+        border-bottom: 10px solid white;
         background: rgb(200,28,158);
         background: linear-gradient(149deg, rgba(200, 28, 157, 0.404) 2%, rgba(155,26,194,0.6979166666666667) 26%, rgba(16, 29, 207, 0.478) 50%, rgba(20,106,190,0.6587009803921569) 75%, rgba(20, 111, 190, 0.782) 77%, rgba(19, 151, 195, 0.486) 99%);
     }

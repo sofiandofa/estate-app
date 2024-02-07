@@ -8,24 +8,27 @@ import otpGenerator  from 'otp-generator'
 
 export const isRegister=async(req,res,next)=>{
     const {username, email, password}= req.body
-
-    // Check if All Details are there or not
-    if (!username ||
-        !email ||
-        !password
-    ) {
-        next(handleErorr(405,'All Fields are required'))
+    try {
+        // Check if All Details are there or not
+        if (!username ||
+            !email ||
+            !password
+        ) {
+            next(handleErorr(405,'All Fields are required'))
+        }
+    
+        //check if use already exists?
+        const existingUser = await User.findOne({email})
+        if(existingUser){
+            next(handleErorr(400,'User already exists'))
+        }
+        return res.status(200).json({
+            success: true,
+            message: "the user doesn't register ✅"
+        })
+    } catch (error) {
+        next(error)
     }
-
-    //check if use already exists?
-    const existingUser = await User.findOne({email})
-    if(existingUser){
-        next(handleErorr(400,'User already exists'))
-    }
-    return res.status(200).json({
-        success: true,
-        message: "the user doesn't register ✅"
-    })
 }
 
 
@@ -98,13 +101,13 @@ export const google =async(req,res,next)=>{
             Math.random().toString(36).slice(-8) +
             Math.random().toString(36).slice(-8);
             const hashedPassword=bcryptjs.hashSync(generatedPassword,10)
-            const newUser=new User.create({
+            const newUser=await User.create({
                 username:username.split(' ').join('').toLowerCase() + Math.random().toString(36).slice(-3),
                 email,
                 password:hashedPassword,
                 avatar
             })
-            await newUser.save()
+            
 
             const token=jwt.sign({id:newUser._id},process.env.JWT_SECRET)
             const{password:pass,...rest}=newUser._doc

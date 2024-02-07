@@ -4,8 +4,9 @@ const mailSender = async (email, title, body)=>{
     try {
         //to send email ->  firstly create a Transporter
         let transporter = nodemailer.createTransport({
-            host:process.env.MAIL_HOST,  //-> Host SMTP detail
+            host:process.env.MAIL_HOST,//-> Host SMTP detail  
             service:'gmail',
+
                 auth:{
                     user: process.env.MAIL_USER,  //-> User's mail for authentication
                     pass: process.env.MAIL_PASS,  //-> User's password for authentication

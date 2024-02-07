@@ -3,7 +3,6 @@ import OAuth from "../components/OAuth"
 import { useDispatch } from "react-redux"
 import {signUp} from "../redux/user/signUpSlice"
 import { useNavigate } from "react-router-dom"
-import bg_img from '../assets/backround-image.jpg'
 function SignUp() {
     const[loading,setLoading]=useState(false)
     const[error,setError]=useState(false)
@@ -31,20 +30,22 @@ function SignUp() {
                 username:formData.username,
                 password:formData.password,
             }))
-            const resOtp= await fetch("/api/auth/sentOtp",{
-                method:"POST",
-                headers:{
-                    'Content-Type': 'application/json',
-                },
-                body:JSON.stringify(formData)
-            })
-            const dataOtp=await resOtp.json()
-            if(dataOtp.success===false){
-                return setError(dataOtp.message)
+            if(data.success!==false){
+                const resOtp= await fetch("/api/auth/sentOtp",{
+                    method:"POST",
+                    headers:{
+                        'Content-Type': 'application/json',
+                    },
+                    body:JSON.stringify(formData)
+                })
+                const dataOtp=await resOtp.json()
+                if(dataOtp.success===false){
+                    setError(dataOtp.message)
+                }
+                navigate("/sign-up/verify-email")
             }
-            navigate("/sign-up/verify-email")
         } catch (error) {
-            setError(error)
+            setError(error.message)
         }
     }
     const handleChange=(e)=>{

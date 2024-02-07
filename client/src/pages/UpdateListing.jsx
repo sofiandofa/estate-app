@@ -42,7 +42,7 @@ const UpdateListing = () => {
     },[params.listingId])
     const handleImageSubmit=async(e)=>{
         e.preventDefault();
-        if(files.length>0 && formData.imageUrls+files.length < 7 ){
+        if(files.length>0 && +formData.imageUrls.length + files.length < 7 ){
             const promises=[];
             for (let i = 0; i < files.length; i++){
                 promises.push(storeImage(files[i]))
@@ -55,10 +55,12 @@ const UpdateListing = () => {
                     ...formData,
                     imageUrls:formData.imageUrls.concat(urls)
                 })
+                setUploading(false)
             })
             .catch(
                 setImageUploadError("Image upload failed (2 mb max per image)"),
-                setError(false)
+                setError(false),
+                setUploading(false),
                 )
             }
         else{
@@ -122,7 +124,7 @@ const UpdateListing = () => {
     const handleSubmit=async(e)=>{
         e.preventDefault()
         try {
-            const res=fetch(`/api/listing/update/${params.listingId}`,{
+            const res=await fetch(`/api/listing/update/${params.listingId}`,{
                 method:"POST",
                 headers:{
                         'Content-Type': 'application/json',
